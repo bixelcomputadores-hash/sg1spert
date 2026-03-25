@@ -185,6 +185,20 @@ const server = http.createServer(async (req, res) => {
     return ok(res, { ok: true });
   }
 
+  // ── POST /admin/reactivar — Reactivar licencia suspendida ──────────
+  if(req.method === 'POST' && url === '/admin/reactivar'){
+    if(req.headers['x-admin-key'] !== ADMIN_KEY) return err(res, 'No autorizado', 403);
+    const { codigo } = await parseBody(req);
+    const db  = leerDB();
+    const idx = db.findIndex(l => l.codigo === codigo?.toUpperCase());
+    if(idx < 0) return err(res, 'Licencia no encontrada');
+    db[idx].suspendida = false;
+    db[idx].historial  = db[idx].historial || [];
+    db[idx].historial.push({ accion: 'Reactivación', fecha: new Date().toISOString().split('T')[0] });
+    guardarDB(db);
+    return ok(res, { ok: true, licencia: db[idx] });
+  }
+
   // ── GET /admin/lista — Listar todas las licencias ─────────────────
   if(req.method === 'GET' && url === '/admin/lista'){
     if(req.headers['x-admin-key'] !== ADMIN_KEY) return err(res, 'No autorizado', 403);
