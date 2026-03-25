@@ -117,7 +117,7 @@ const server = http.createServer(async (req, res) => {
 
     if(!empresa) return err(res, 'Empresa requerida');
 
-    const codigo = generarCodigo();
+    const codigo = body.codigo_override || generarCodigo();
     const vence  = new Date(); vence.setDate(vence.getDate() + parseInt(dias));
 
     const lic = {
