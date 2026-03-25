@@ -1,0 +1,12 @@
+{
+  "name": "sig-licencias",
+  "version": "1.0.0",
+  "description": "Servidor de licencias SIG Portal",
+  "main": "servidor_licencias.js",
+  "scripts": {
+    "start": "node servidor_licencias.js"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
